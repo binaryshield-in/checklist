@@ -1,0 +1,39 @@
+# robots.txt — BinaryShield Web VAPT Checklist
+# https://checklist.binaryshield.in/robots.txt
+
+# Allow all search engines and AI crawlers
+User-agent: *
+Allow: /
+
+# Google
+User-agent: Googlebot
+Allow: /
+
+# Bing
+User-agent: Bingbot
+Allow: /
+
+# GPTBot (ChatGPT / OpenAI)
+User-agent: GPTBot
+Allow: /
+
+# Claude / Anthropic
+User-agent: ClaudeBot
+Allow: /
+
+# Google Bard / Gemini
+User-agent: Google-Extended
+Allow: /
+
+# Common crawlers
+User-agent: CCBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+# Sitemap location
+Sitemap: https://checklist.binaryshield.in/sitemap.xml
